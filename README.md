@@ -1,3 +1,4 @@
 # Image-Classifier
+This project uses vgg16 (and densenet121) to create an image classifier. 
 
-Create your own image classifier as part of a Udacity's AI Programming with Python Project.
+This is part of 'create your own image classifier'project in Udacity's AI Programming with Python.
