@@ -43,11 +43,8 @@ def process_image(image):
     return np_image
                         
 def load_checkpoint(filepath):
-    print("Loading from checkpoint..")
-    #might be missing some??                    
+    print("Loading from checkpoint..")                   
     checkpoint=torch.load(filepath)
-    #model=checkpoint['pretrained_model']
-    #changed the bottom
     model=getattr(torchvision.models, checkpoint['pretrained_model'])(pretrained=True)
     model.classifier=checkpoint['classifier']                    
     learning_rate=checkpoint['learning_rate']
