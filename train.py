@@ -94,7 +94,7 @@ def save_checkpoint(model, optimizer, path, output_size, train_datasets, classif
     print("Saving model...")
     model.class_to_idx = train_datasets.class_to_idx
     
-    #hdden units and input size pot issues - changed here and added args
+    #hidden units and input size pot issues - added args
     checkpoint={'pretrained_model': args.arch,
            # 'input_size': input_size,
             'output_size': output_size,
@@ -113,7 +113,7 @@ def main():
     
     print("in Main Module...")
     args = parse_args()
-    #might need to change this to the actual flower set
+    
     data_dir='flowers'
     train_dir = data_dir + '/train'
     valid_dir = data_dir + '/valid'
@@ -139,8 +139,7 @@ def main():
     testloaders= torch.utils.data.DataLoader(test_datasets, batch_size=64, shuffle= True)
     validloaders=torch.utils.data.DataLoader(valid_datasets, batch_size=64, shuffle=True)
     
-    #load the model ---need to figure out how to load the model-- do i need to add a function or just get attributes??? attribute might be easier
-    #a lot changed here 
+    #load the model
     model=getattr(models, args.arch)(pretrained=True)
     
     if args.arch == 'vgg16':
@@ -153,7 +152,7 @@ def main():
             ('output', nn.LogSoftmax(dim=1))]))
     elif args.arch == 'densenet121':
         model=models.densenet121(pretrained=True)
-        #this portion was distinct from statement blocks
+        #this portion distinct from statement blocks
         classifier = nn.Sequential(OrderedDict([ 
                           ('fc1', nn.Linear(1024, 500)),
                           ('dropout', nn.Dropout(p=0.6)),
@@ -162,7 +161,7 @@ def main():
                           ('output', nn.LogSoftmax(dim=1))
                           ]))                         
         
-    #turn off gradient,  n
+    #turn off gradient
     for param in model.parameters():
         param.requires_grad=False
         
@@ -172,7 +171,6 @@ def main():
     optimizer = optim.Adam(model.classifier.parameters(), lr=float(args.learning_rate))
     epochs=int(args.epochs)
     class_idx=train_datasets.class_to_idx
-    #gpu=args.gpu
     output_size=102
     train_mode(model, criterion, optimizer, trainloaders, epochs, validloaders)
     model.class_to_idx=class_idx
